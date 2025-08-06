@@ -218,6 +218,78 @@
     .download-btn:active {
         transform: translateY(0);
     }
+    @media (max-width: 992px) {
+        .sidebar {
+            width: 100%;
+            position: relative;
+            height: auto;
+        }
+        
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+        
+        table {
+            min-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .header-actions {
+            width: 100%;
+            justify-content: flex-start;
+        }
+        
+        .download-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        
+        .table-container {
+            padding: 10px;
+            overflow-x: scroll;
+        }
+        
+        th, td {
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+        
+        .logo-section img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .nav-links {
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 12px 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header h1 {
+            font-size: 20px;
+        }
+        
+        th, td {
+            padding: 6px 8px;
+            font-size: 12px;
+        }
+        
+        .respondent-id, .timestamp {
+            font-size: 11px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -644,6 +716,21 @@
             });
         } else {
             console.warn('Download button not found');
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const logoSection = document.querySelector('.logo-section');
+        if (logoSection && window.innerWidth <= 992) {
+            const navLinks = document.querySelector('.nav-links');
+            
+            logoSection.addEventListener('click', function() {
+                if (navLinks.style.display === 'flex') {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                }
+            });
         }
     });
 </script>

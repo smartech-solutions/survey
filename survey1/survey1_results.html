@@ -355,6 +355,118 @@
             transform: translateX(5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+        @media (max-width: 1200px) {
+        .container {
+            margin-left: 280px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .container {
+            margin-left: 0;
+            margin-top: 80px;
+        }
+        
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: fixed;
+            top: 0;
+            padding: 15px;
+            z-index: 1000;
+        }
+        
+        .logo-section {
+            margin-bottom: 15px;
+        }
+        
+        .logo-section img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .nav-links {
+            display: none;
+        }
+        
+        .header {
+            padding: 20px;
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+        }
+        
+        .stats-bar {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .insights {
+            grid-template-columns: 1fr;
+        }
+        
+        .tabs {
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            flex: 1 0 45%;
+            margin: 5px;
+        }
+        
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .chart-card {
+            padding: 15px;
+        }
+        
+        .key-findings {
+            grid-template-columns: 1fr;
+        }
+        
+        .rec-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header h1 {
+            font-size: 1.5em;
+        }
+        
+        .header p {
+            font-size: 1em;
+        }
+        
+        .stat-item {
+            font-size: 0.8em;
+        }
+        
+        .insight-card h3 {
+            font-size: 1.1em;
+        }
+        
+        .insight-card p {
+            font-size: 0.9em;
+        }
+        
+        .chart-card h3 {
+            font-size: 1.2em;
+        }
+        
+        .finding h4 {
+            font-size: 1em;
+        }
+        
+        .finding p {
+            font-size: 0.8em;
+        }
+    }
     </style>
 </head>
 
@@ -825,6 +937,21 @@
         document.addEventListener('DOMContentLoaded', function () {
             initCharts();
         });
+        document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const logoSection = document.querySelector('.logo-section');
+        if (logoSection && window.innerWidth <= 992) {
+            const navLinks = document.querySelector('.nav-links');
+            
+            logoSection.addEventListener('click', function() {
+                if (navLinks.style.display === 'flex') {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                }
+            });
+        }
+    });
     </script>
 </body>
 

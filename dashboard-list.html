@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMARTECH Employee Survey Dashboard</title>
+    <link rel="stylesheet" href="responsive.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         html {
@@ -651,6 +652,23 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const logoSection = document.querySelector('.logo-section');
+        if (logoSection && window.innerWidth <= 992) {
+            const navLinks = document.querySelector('.nav-links');
+            
+            logoSection.addEventListener('click', function() {
+                if (navLinks.style.display === 'flex') {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                }
+            });
+        }
+    });
+    </script>
 </body>
 
 </html>
