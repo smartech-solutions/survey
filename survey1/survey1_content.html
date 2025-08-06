@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMARTECH - Résultats d'enquête</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #129ddd 0%, #5a95b1 100%);
+            color: white;
+            padding: 30px 25px;
+            box-shadow: 5px 0 25px rgba(18, 157, 221, 0.3);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-section img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 30%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-section img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .logo-section h1 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .logo-section p {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            width: calc(100% - 280px);
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #129ddd;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 2000px;
+        }
+        
+        th {
+            background-color: #129ddd;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f9fd;
+        }
+        
+        .empty-cell {
+            background-color: #f5f5f5;
+        }
+        
+        .respondent-id {
+            font-weight: bold;
+            color: #129ddd;
+        }
+        
+        .timestamp {
+            font-size: 13px;
+            color: #666;
+        }
+        .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .download-btn {
+        background-color: #129ddd;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 8px rgba(18, 157, 221, 0.2);
+    }
+    
+    .download-btn:hover {
+        background-color: #0a8ac7;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(18, 157, 221, 0.3);
+    }
+    
+    .download-btn:active {
+        transform: translateY(0);
+    }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-section">
+            <img src="../smartech_logo.png" alt="Smartech Logo" />
+            <h1>SMARTECH SOLUTIONS</h1>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard-list.html" class="nav-link active">Liste des tableaux de bord</a>
+            <a href="content-list.html" class="nav-link">Liste du contenu des enquêtes</a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>Les réponses de l'enquête</h1>
+            <div class="header-actions">
+    <button id="downloadXml" class="download-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Télécharger en XML
+    </button>
+</div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Répondant</th>
+                        <th>Valeurs de l'entreprise</th>
+                        <th>Points forts de l'entreprise</th>
+                        <th>Défis/opportunités</th>
+                        <th>Objectifs de l'entreprise</th>
+                        <th>Services offerts</th>
+                        <th>Domaines d'amélioration</th>
+                        <th>Avantages concurrentiels</th>
+                        <th>Vision de l'entreprise (10 ans)</th>
+                        <th>Position sur le marché</th>
+                        <th>Opportunités de développement</th>
+                        <th>Perception client</th>
+                        <th>Perception client future</th>
+                        <th>Perception des employés</th>
+                        <th>Perception régionale/nationale</th>
+                        <th>Qualités des employés</th>
+                        <th>Valeurs de l'entreprise</th>
+                        <th>Priorités de l'entreprise</th>
+                        <th>Moments de fierté</th>
+                        <th>Comportements inacceptables</th>
+                        <th>Réalisations récentes</th>
+                        <th>Domaines à améliorer</th>
+                        <th>Facteurs de motivation</th>
+                        <th>Suggestions d'amélioration</th>
+                        <th>Contribution au développement</th>
+                        <th>Description de l'entreprise</th>
+                        <th>Fierté personnelle</th>
+                        <th>Fierté des clients</th>
+                        <th>Perception des concurrents</th>
+                        <th>Perception du marché</th>
+                        <th>Recommandations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="respondent-id">1</td>
+                        <td class="timestamp">7/31/25 12:38:46</td>
+                        <td class="timestamp">7/31/25 13:10:56</td>
+                        <td>anonymous</td>
+                        <td>efficacité , innovante et durable</td>
+                        <td>Relations clients durables ;Réactivité et proximité client;</td>
+                        <td>Modernisation technologique ;Formation des équipes ;Évolution réglementaire;</td>
+                        <td>devenir un leader dans le marché et octroi des affaire au EMIRATS</td>
+                        <td>Conception et engineering;Modernisation de systèmes existants;Formation technique;Installation et commissioning;Support technique et dépannage;Maintenance préventive/corrective;</td>
+                        <td>Conformité réglementaire;Amélioration de la qualité produits;Réduction des coûts de maintenance ;Amélioration de l'efficacité opérationnelle;</td>
+                        <td>Expertise unique</td>
+                        <td>Une entreprise responsable, respectueuse, innovante et reconnue à l'échelle mondiale</td>
+                        <td>Leader régional ;Acteur de référence national ;Innovateur technologique;</td>
+                        <td>Services à valeur ajoutée;Formations et certifications ;Nouvelles technologies (IA, digitalisation);Partenariats stratégiques;</td>
+                        <td>leader</td>
+                        <td>Consultant expert, nous apportons des conseils stratégiques, personnalisés et adaptés aux enjeux de chaque client.</td>
+                        <td>dynamiques et cherchons des solutions par nous-mêmes avant de demander à notre superviseur</td>
+                        <td>leader</td>
+                        <td>respectueux , ponctuel , chercheur des solutions</td>
+                        <td>Proximité client ;Esprit d'équipe;Sécurité avant tout;Intégrité et honnêteté ;</td>
+                        <td>Efficacité opérationnelle;Communication interne ;Excellence technique;</td>
+                        <td>Toute l'équipe, partageant la même passion, a travaillé samedi et dimanche pour atteindre son objectif</td>
+                        <td>hygiène , code vestimentaires et assume la responsabilité</td>
+                        <td>Le projet, prolongé de 12 mois, est enfin terminé ( phase etude)</td>
+                        <td>avoir une optimisation qualité/ temps</td>
+                        <td>Évolution professionnelle;Argent;Impact de mon travail;Autonomie dans les missions;Reconnaissance de l'expertise;Défis techniques intéressants;Esprit d'équipe;Satisfaction client;</td>
+                        <td>le recrutement des différents profils afin d'avoir le potentiel nécessaire pour terminer le projet avec nos propres effectifs et efforts, sans faire appel à la sous-traitance.</td>
+                        <td>meilleur gestion des ressources</td>
+                        <td>Notre entreprise est innovante et respecte des valeurs humaines fortes, créant un environnement de travail sain et stimulant. Chaque collaborateur y est encouragé à être autonome et à contribuer activement aux projets</td>
+                        <td>je suis autonome</td>
+                        <td>sont satisfaits</td>
+                        <td>.</td>
+                        <td>consultant et expert</td>
+                        <td>non</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">2</td>
+                        <td class="timestamp">7/31/25 13:06:04</td>
+                        <td class="timestamp">7/31/25 13:12:20</td>
+                        <td>anonymous</td>
+                        <td>all good</td>
+                        <td>Relations clients durables ;Expertise technique reconnue ;</td>
+                        <td>Modernisation technologique ;Formation des équipes ;Amélioration des processus internes;</td>
+                        <td>delivrable de qualité et la numérisation , digitalisation</td>
+                        <td>Conception et engineering;Maintenance préventive/corrective;Modernisation de systèmes existants;Support technique et dépannage;Installation et commissioning;Formation technique;</td>
+                        <td>Conformité réglementaire;</td>
+                        <td>l'ergonomie</td>
+                        <td>dans une autre place</td>
+                        <td>Leader régional ;Innovateur technologique;</td>
+                        <td>Nouvelles technologies (IA, digitalisation);Formations et certifications ;Services à valeur ajoutée;</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>good service</td>
+                        <td>Intégrité et honnêteté ;Excellence technique;Proximité client ;Esprit d'équipe;Innovation et créativité ;</td>
+                        <td>Excellence technique;Innovation et créativité ;Communication interne ;Formation continue;Anticipation des besoins clients ;Efficacité opérationnelle;</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>Esprit d'équipe;Autonomie dans les missions;Impact de mon travail;Satisfaction client;Argent;Évolution professionnelle;Défis techniques intéressants;Reconnaissance de l'expertise;</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>all good</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>all good</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">3</td>
+                        <td class="timestamp">7/31/25 13:56:57</td>
+                        <td class="timestamp">7/31/25 14:43:14</td>
+                        <td>anonymous</td>
+                        <td>sécurité, responsabilité, intégrité</td>
+                        <td>Expertise technique reconnue ;</td>
+                        <td>Amélioration des processus internes;</td>
+                        <td>fournir un produit/service de qualité ; travail et produire en sécurité ; garantir nos clients et les orientés stratégiquement</td>
+                        <td>Maintenance préventive/corrective;Modernisation de systèmes existants;Installation et commissioning;Formation technique;Conception et engineering;Support technique et dépannage;</td>
+                        <td>Modernisation technologique;Conformité réglementaire;Amélioration de la qualité produits;</td>
+                        <td>l'intégration "contrôle procédés + contrôle qualité + instrumentation avec une culture QHSE exemplaire" ; notre capacité et notre traçabilité</td>
+                        <td>entreprise référence en matière QHSE ; entreprise ou chaque collaborateur est un ambassadeur dans sa spécialité et de l'engagement en matière QHSE ; acteur de transformation et de l'innovation avec conservation de notre identité et fiabilité</td>
+                        <td>Leader régional ;</td>
+                        <td>Nouvelles technologies (IA, digitalisation);Formations et certifications ;</td>
+                        <td>"partenaire qui aide à dépasser leurs objectifs, à orienter leur vision vers les besoins et les stratégies exactes ; partenaire exemplaire qui fait leur travail dans les règles de l'art, en sécurité et avec des qualités"</td>
+                        <td>accompagner vers l'excellence QHSE ; réduire les risques ; garantir la conformité réglementaire et normative</td>
+                        <td>"environnement sein et sur amélioration des compétences et des capacités engagement QHSE"</td>
+                        <td>"amélioration des standards QHSE former des professionnels exemplaires"</td>
+                        <td>"conscience sécurité esprit d'équipe et intégrité respecter l'hygiène"</td>
+                        <td>Excellence technique;Innovation et créativité ;Proximité client ;Fiabilité et respect des engagements;Professionnalisme ;</td>
+                        <td>Formation continue;Responsabilité environnementale ;</td>
+                        <td>...</td>
+                        <td>"non respect d'hygiène non respect de l'équipe négliger une non conformité non respect du délai"</td>
+                        <td>...</td>
+                        <td>"l'obtention des certificats 9001/45001 maintien le SMI et l'intègre dans tous les processus digitalisation de nos processus du travail et du contrôle développement d'une offre de formation certifiante pour nos clients"</td>
+                        <td>Évolution professionnelle;Défis techniques intéressants;Argent;Reconnaissance de l'expertise;Autonomie dans les missions;Impact de mon travail;Esprit d'équipe;Satisfaction client;</td>
+                        <td>"implémentation de la culture SMI les outils IA des moments d'échange sur les bonnes pratiques, retours d'expériences..."</td>
+                        <td>"démarche stratégique axée sur l'innovation technique, l'évolution technologique, l'excellence opérationnelle et la création de valeur développer notre présence à l'international évoluer comme un acteur de référence, agile, responsable et durable étendre notre expertise vers des secteurs durables, innovants, et stratégique ( énergies renouvelables, hydrogène vert...)"</td>
+                        <td>"intégrer un environnement stimulant, innovant avec amélioration continue du produit/service et des secteurs stratégiques la qualité, la sécurité sont des valeurs fondamentales et le respect des personnes sont au cœurs de toutes nos décisions"</td>
+                        <td>"nos donnons l'exemple en matière de l'humanité et la transparence mon travail contribue concrètement à protéger nos PPI ainsi que l'environnement"</td>
+                        <td>expert qu'on choisit pour les projet critique (qualité; surté ; fiabilité ; confiance...)</td>
+                        <td>référence technique</td>
+                        <td>référence technique en matière QHSE et en professionnalisme</td>
+                        <td>"synergie ""procédés + qualité + sécurité-santé + instrumentation"" éthique professionnel exemplaire renforcer la veille technologique renforcer la collaboration inter-services"</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">4</td>
+                        <td class="timestamp">8/1/25 10:20:29</td>
+                        <td class="timestamp">8/1/25 15:02:44</td>
+                        <td>anonymous</td>
+                        <td>Ingénierie – Expertise – Fiabilité</td>
+                        <td>Expertise technique reconnue ;Équipe compétente et expérimentée;</td>
+                        <td>Développement commercial ;Modernisation technologique ;Formation des équipes ;Amélioration des processus internes;Concurrence accrue;Évolution réglementaire;</td>
+                        <td>Développer notre présence commerciale et asseoir notre notoriété dans le secteur Oil & Gas, en capitalisant sur notre expertise technique et la réussite de nos projets.</td>
+                        <td>Conception et engineering;Formation technique;Modernisation de systèmes existants;Support technique et dépannage;Installation et commissioning;Maintenance préventive/corrective;</td>
+                        <td>Modernisation technologique;Réduction des arrêts non programmés;Conformité réglementaire;Amélioration de la qualité produits;Réduction des coûts de maintenance ;Amélioration de l'efficacité opérationnelle;</td>
+                        <td>Notre capacité à allier expertise technique, réactivité et proximité client. Contrairement à de plus grandes structures souvent rigides, nous offrons des solutions sur mesure, avec une grande agilité opérationnelle et un engagement fort sur le terrain.</td>
+                        <td>Dans 10 ans, nous voyons notre entreprise parmi les acteurs les plus réputés, non seulement dans le secteur Oil & Gas, mais aussi dans les domaines de l'énergie renouvelable et des nouvelles technologies. Forte de son expertise et de sa capacité à s'adapter, notre entreprise sera reconnue pour son excellence technique, son engagement en faveur de la transition énergétique et sa contribution à des projets innovants, durables et stratégiques .</td>
+                        <td>Spécialiste de niche reconnu;Innovateur technologique;</td>
+                        <td>Nouveaux secteurs industriels ;Services à valeur ajoutée;Partenariats stratégiques;</td>
+                        <td>"Comme une entreprise reconnue pour son expertise fiable, son professionnalisme constant et son rôle de leader en matière de savoir-faire. Nous souhaitons être perçus comme un partenaire de confiance, spécialiste des technologies de pointe et capable d'apporter des solutions innovantes et durables aux défis de demain. Référence en matière d'expertise et de technologie."</td>
+                        <td>"AAAA"</td>
+                        <td>AAAA</td>
+                        <td>AAAA</td>
+                        <td>"compétence technique ouverture a l'apprentissage* esprit d'équipe"</td>
+                        <td>Intégrité et honnêteté ;Proximité client ;Esprit d'équipe;Innovation et créativité ;</td>
+                        <td>Excellence technique;Innovation et créativité ;Efficacité opérationnelle;</td>
+                        <td>complicité lorsque il y'a une pression de délai</td>
+                        <td>nonchallence et désinteret</td>
+                        <td>engagement de l'equipe dans l'amelioration de pr'ocessus interne et avancement dans les projet en cour</td>
+                        <td>competence technique</td>
+                        <td>Impact de mon travail;Satisfaction client;Reconnaissance de l'expertise;Argent;Défis techniques intéressants;Autonomie dans les missions;Évolution professionnelle;Esprit d'équipe;</td>
+                        <td>positivisme et professionnalisme</td>
+                        <td>"Structurant et digitalisant nos processus : mise en place d'un Système d'Information Achat ERP pour automatiser les RFQ, les comparaisons fournisseurs et le suivi des commandes. Optimisant le panel fournisseurs : élaboration d'une stratégie d'achat"</td>
+                        <td>"Notre entreprise est une référence dans le secteur de l'ingénierie Oil & Gas, alliant expertise technique, innovation et rigueur opérationnelle. Rejoindre notre équipe, c'est intégrer une structure ambitieuse, en pleine croissance, qui valorise l'excellence, la collaboration et le savoir-faire."</td>
+                        <td>Je suis fier de travailler ici parce que nous participons à des projets d'envergure qui ont un réel impact sur le développement énergétique.</td>
+                        <td>Je suis fier de travailler ici parce que nous faisons un travail sérieux, utile, et toujours orienté vers la satisfaction du client.</td>
+                        <td>Je suis fier de faire partie d'une entreprise qui mise sur la compétence, la fiabilité et la qualité du travail bien fait.</td>
+                        <td>aaaa</td>
+                        <td>Je pense qu'une clarification plus précise des rôles et responsabilités de chacun permettrait de gagner en efficacité et d'éviter les zones d'ambiguïté.</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">5</td>
+                        <td class="timestamp">8/5/25 9:20:35</td>
+                        <td class="timestamp">8/5/25 11:01:59</td>
+                        <td>anonymous</td>
+                        <td>Ethique, Audace, perceverence</td>
+                        <td>Réactivité et proximité client;Qualité des installations réalisées;Autre;Expertise technique reconnue ;</td>
+                        <td>Développement commercial ;Formation des équipes ;Amélioration des processus internes;Modernisation technologique ;</td>
+                        <td>Creer une déffirence chez nos client en proposant des solutions d'ingéneurie créative, personalisées et intégrant d'une facon naturelle les technlogies de pointe. Sur le plan interne intégrer structurellement l'implémentation d'agent IA dans le processus interne de SMARTECH</td>
+                        <td>Conception et engineering;Modernisation de systèmes existants;Formation technique;Support technique et dépannage;Installation et commissioning;Maintenance préventive/corrective;</td>
+                        <td>Modernisation technologique;Réduction des coûts de maintenance ;Amélioration de l'efficacité opérationnelle;Réduction des arrêts non programmés;Conformité réglementaire;Amélioration de la qualité produits;</td>
+                        <td>L'agilité du déploiment, une multidisciplinarité intégrée et l'ouverture sur les technologies</td>
+                        <td>Leadeur régional dans les services d'igéneurie</td>
+                        <td>Leader régional ;Spécialiste de niche reconnu;Acteur de référence national ;</td>
+                        <td>Nouvelles technologies (IA, digitalisation);Services à valeur ajoutée;Formations et certifications ;Partenariats stratégiques;</td>
+                        <td>Partenaire fiable et integre occupant le statut d'expert conseille de choix</td>
+                        <td>ckoi ca</td>
+                        <td>pa compri</td>
+                        <td></td>
+                        <td>Intègre, disposé à progresser et s'améliorer en continue, collaboratif, doté d'un esprit analytique rigoureux et d'un sens de l'initiative développé</td>
+                        <td>Excellence technique;Intégrité et honnêteté ;Proximité client ;Esprit d'équipe;Innovation et créativité ;</td>
+                        <td>Innovation et créativité ;Excellence technique;Formation continue;Anticipation des besoins clients ;Communication interne ;</td>
+                        <td>J'étais particulièrement fier de mon équipe lorsque nous nous sommes engagés auprès du client à livrer un certain nombre de documents et que l'équipe a accepté de travailler durant le weekend pour honorer nos engagements.</td>
+                        <td>Les comportements irrespectueux, les atteintes à la vie privée et le non-respect des règles de vie collective.</td>
+                        <td>Avoir gérer un projet de l'envergure du 16" Pipeline de SOC ave une équipe jeune avec peu d'experience.</td>
+                        <td>Gestion du temps et des priorités, acquerir plus de confiance et l'amélioration de l'aproche méthodologique des uns et des autres</td>
+                        <td>Satisfaction client;Argent;Impact de mon travail;Défis techniques intéressants;Esprit d'équipe;Évolution professionnelle;Autonomie dans les missions;Reconnaissance de l'expertise;</td>
+                        <td>Plus d'engagement et d'implication des collaborateurs</td>
+                        <td>Developper l'activité Upstream et formation</td>
+                        <td>Une équipe soudée et compétente</td>
+                        <td>l'avenir est a nous</td>
+                        <td></td>
+                        <td></td>
+                        <td>Une éthique irréprochable et une expertise confirmée constituent les piliers fondamentaux de toute organisation aspirant à la durabilité.</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">6</td>
+                        <td class="timestamp">8/5/25 12:34:10</td>
+                        <td class="timestamp">8/5/25 12:45:45</td>
+                        <td>anonymous</td>
+                        <td>Innovante, engagée, humaine</td>
+                        <td>Expertise technique reconnue ;</td>
+                        <td>Formation des équipes ;Amélioration des processus internes;Développement commercial ;</td>
+                        <td>"fournir des solutions fiables et innovantes pour répondre efficacement aux besoins de nos clients"</td>
+                        <td>Conception et engineering;Modernisation de systèmes existants;Maintenance préventive/corrective;Formation technique;Support technique et dépannage;Installation et commissioning;</td>
+                        <td>Amélioration de la qualité produits;Amélioration de l'efficacité opérationnelle;Modernisation technologique;</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>Innovateur technologique;Leader régional ;</td>
+                        <td>Partenariats stratégiques;Services à valeur ajoutée;Nouveaux secteurs industriels ;</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>Les trois qualités les plus importantes qu'un collaborateur de notre entreprise doit avoir sont : la rigueur, pour garantir la qualité et la sécurité de notre travail ; l'esprit d'équipe, car la collaboration est essentielle à la réussite de nos projets ; et l'adaptabilité, pour faire face efficacement aux évolutions techniques et aux exigences du terrain</td>
+                        <td>Excellence technique;Esprit d'équipe;Intégrité et honnêteté ;Sécurité avant tout;Innovation et créativité ;</td>
+                        <td>Formation continue;Innovation et créativité ;</td>
+                        <td>.</td>
+                        <td>le manque de respect</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>Satisfaction client;Évolution professionnelle;Impact de mon travail;Argent;Défis techniques intéressants;Reconnaissance de l'expertise;Esprit d'équipe;Autonomie dans les missions;</td>
+                        <td>.</td>
+                        <td>Je souhaiterais contribuer au développement futur de l'entreprise en proposant des solutions innovantes, en améliorant continuellement les processus existants, et en partageant mes compétences pour renforcer le travail d'équipe et atteindre nos objectifs communs</td>
+                        <td>"."</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>.</td>
+                        <td>.</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">7</td>
+                        <td class="timestamp">8/5/25 11:57:36</td>
+                        <td class="timestamp">8/5/25 12:50:42</td>
+                        <td>anonymous</td>
+                        <td>Collaboration , entraide , innovation</td>
+                        <td>Équipe compétente et expérimentée;Relations clients durables ;Réactivité et proximité client;Expertise technique reconnue ;</td>
+                        <td>Formation des équipes ;Concurrence accrue;Développement commercial ;Modernisation technologique ;</td>
+                        <td>Mener à bien les projets avec rigueur et excellence, sans aucune erreur, afin de gagner la confiance des clients et obtenir des retours positifs. Développer notre réseau pour accroître notre notoriété, tout en visant en permanence la qualité, l'amélioration continue et le perfectionnement de nos réalisations. L'objectif étant également d'augmenter le nombre de projets pris en charge.</td>
+                        <td>Conception et engineering;Installation et commissioning;Maintenance préventive/corrective;Formation technique;Support technique et dépannage;Modernisation de systèmes existants;</td>
+                        <td>Réduction des arrêts non programmés;Conformité réglementaire;Amélioration de la qualité produits;Amélioration de l'efficacité opérationnelle;</td>
+                        <td>Notre engagement constant envers la qualité, la précision et la satisfaction client. De plus, notre capacité à nous adapter, à innover et à évoluer en fonction des besoins du marché renforce notre position et la confiance que nous accordent nos partenaires.</td>
+                        <td>Grâce à une stratégie de développement maîtrisée, à l'amélioration continue de nos processus et à la fidélité de nos clients, nous aurons élargi notre présence à l'échelle nationale ,voire internationale tout en conservant nos valeurs fondamentales : rigueur, professionnalisme, et proximité. Notre entreprise sera un modèle de croissance durable, avec une équipe soudée, engagée, et fière de contribuer à son succès tout en travaillant sur plusieurs projets immenses.</td>
+                        <td>Innovateur technologique;Leader régional ;</td>
+                        <td>Nouvelles technologies (IA, digitalisation);Formations et certifications ;Partenariats stratégiques;</td>
+                        <td>J'aimerais que nos clients nous perçoivent comme un partenaire de confiance, fiable et engagé, sur lequel ils peuvent toujours compter pour des solutions de qualité, livrées avec rigueur et professionnalisme. Une entreprise innovante, à l'écoute de leurs besoins, réactive, et constamment tournée vers l'amélioration continue.</td>
+                        <td>?</td>
+                        <td>Je souhaite que nos employés nous perçoivent comme une entreprise responsable, valorisante et humaine , un environnement où chacun se sent respecté, écouté, et reconnu pour son travail. Une organisation qui offre des opportunités d'évolution, encourage le développement des compétences, et favorise l'esprit d'équipe.</td>
+                        <td>Je souhaite que notre région et notre pays nous perçoivent comme un acteur fiable et durable du tissu économique, qui participe concrètement à la construction d'un avenir meilleur.</td>
+                        <td>Rigueur et précision  , responsabilité , Proactivité et sens de l'initiative</td>
+                        <td>Sécurité avant tout;Innovation et créativité ;Proximité client ;Esprit d'équipe;Excellence technique;</td>
+                        <td>Communication interne ;Formation continue;</td>
+                        <td>"Lorsque nous recevons des approbations, des encouragements ou des remerciements de la part des clients."</td>
+                        <td>Le manque de responsabilité, l'égoïsme, ainsi que toute attitude contraire à l'esprit d'équipe et au respect mutuel.</td>
+                        <td>Notre plus grande réussite récente réside dans l'avancement significatif ( 91%) du projet ainsi que dans l'amélioration globale de notre entreprise à plusieurs niveaux.</td>
+                        <td>Nous devrions prioritairement renforcer nos processus internes afin d'améliorer l'efficacité opérationnelle et accentuer notre communication interne pour une meilleure coordination entre les équipes. Par ailleurs, investir dans la formation continue est essentiel pour maintenir nos compétences à jour. En complément, le développement des encouragements financiers, des avantages tels que les tickets restaurant, les cadeaux ou encore les excursions contribuerait à renforcer la motivation et l'engagement des employés.</td>
+                        <td>Défis techniques intéressants;Satisfaction client;Évolution professionnelle;Reconnaissance de l'expertise;Impact de mon travail;Esprit d'équipe;Argent;Autonomie dans les missions;</td>
+                        <td>"J'aimerais voir une amélioration continue de la communication interne, notamment entre collègues, favorisant davantage de transparence et de collaboration entre les différents services. L'optimisation des processus de communication serait également bénéfique pour fluidifier les échanges. Par ailleurs, le développement de la formation continue et des certifications contribuerait à renforcer les compétences et la performance des équipes."</td>
+                        <td>"Je souhaite contribuer au développement futur de l'entreprise en apportant mes compétences, en participant activement à l'innovation, en travaillant sur plusieurs types de projets et en gérant simultanément plusieurs dossiers, tout en favorisant la collaboration au sein des équipes pour atteindre nos objectifs communs."</td>
+                        <td>Notre entreprise est un leader reconnu dans l'étude des stations oil & gas et de l'industrie pétrolière, alliant expertise technique pointue et innovation pour répondre aux défis complexes du secteur. Nous nous engageons à fournir des solutions fiables et performantes tout en cultivant un environnement de travail stimulant, axé sur l'excellence, la collaboration et le développement continu de nos talents.</td>
+                        <td>Je suis fier de travailler ici parce que j'y acquiers constamment de nouvelles connaissances, développe de bonnes habitudes professionnelles, découvre de nouvelles expériences, collabore avec des collègues engagés, assume des responsabilités enrichissantes, tout en gagnant de l'expérience et en améliorant ma carrière.</td>
+                        <td>Nos clients sont fiers de travailler avec nous parce que nous leur offrons des solutions fiables, un service personnalisé et un engagement constant envers la qualité et l'innovation.</td>
+                        <td>Nos concurrents reconnaissent notre expertise et notre capacité à innover, ce qui nous positionne comme un acteur incontournable et un modèle à suivre dans notre secteur.</td>
+                        <td>Le marché dans lequel nous évoluons est dynamique et compétitif, ce qui nous pousse constamment à innover, à améliorer nos processus, et à offrir des solutions adaptées aux besoins évolutifs de nos clients.</td>
+                        <td>Je recommande de toujours réaliser des enquêtes régulières auprès des employés afin de recueillir leurs avis, comprendre leurs besoins et identifier les opportunités d'amélioration au sein de l'entreprise. Cela favorisera un environnement de travail plus motivant et performant.</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">8</td>
+                        <td class="timestamp">8/5/25 12:33:14</td>
+                        <td class="timestamp">8/5/25 12:58:16</td>
+                        <td>anonymous</td>
+                        <td>Notre entreprise Smartech se distingue par la qualité de son accompagnement, sa capacité à répondre rapidement aux besoins de ses partenaires, et la maîtrise technique de ses équipes.</td>
+                        <td>Réactivité et proximité client;Expertise technique reconnue ;Qualité des installations réalisées;</td>
+                        <td>Développement commercial ;Formation des équipes ;Évolution réglementaire;Amélioration des processus internes;</td>
+                        <td>Selon moi, l'objectif principal de SMARTECH est d'apporter des solutions d'ingénierie innovantes, fiables et adaptées aux besoins spécifiques de ses clients, tout en garantissant la qualité, la sécurité et le respect des délais.</td>
+                        <td>Support technique et dépannage;Conception et engineering;Modernisation de systèmes existants;Formation technique;Maintenance préventive/corrective;Installation et commissioning;</td>
+                        <td>Modernisation technologique;Amélioration de l'efficacité opérationnelle;Réduction des arrêts non programmés;</td>
+                        <td>Ce qui différencie SMARTECH de ses concurrents, c'est la rigueur technique, la capacité à relever des défis complexes, et la qualité des livrables produits.</td>
+                        <td>Dans 10 ans, je vois SMARTECH comme un acteur international majeur dans le domaine de l'ingénierie oil & gas, reconnu pour sa capacité à concevoir et piloter des projets techniques complexes dans des environnements exigeants.</td>
+                        <td>Innovateur technologique;Spécialiste de niche reconnu;Acteur de référence national ;</td>
+                        <td>Nouvelles technologies (IA, digitalisation);Formations et certifications ;Partenariats stratégiques;Services à valeur ajoutée;</td>
+                        <td>J'aimerais que nos clients nous perçoivent comme un partenaire technique fiable, rigoureux et innovant, capable de leur apporter des solutions sur mesure, conformes aux standards internationaux du secteur oil & gas.</td>
+                        <td>Je souhaiterais que, dans le futur, chaque client considère SMARTECH comme un partenaire de confiance, reconnu pour son expertise, son sérieux et sa capacité à délivrer des solutions d'ingénierie oil & gas adaptées à leurs besoins spécifiques.</td>
+                        <td>Je souhaiterais que nos employés soient fiers d'appartenir à SMARTECH, une entreprise qui valorise leur expertise, leur engagement et leur développement professionnel.</td>
+                        <td>Je souhaiterais que notre région/pays soit fier de compter SMARTECH parmi ses entreprises phares, reconnue pour son savoir-faire technique et son rôle dans le développement industriel local.</td>
+                        <td>"Les trois qualités essentielles pour un collaborateur chez SMARTECH sont : Rigueur: pour garantir la qualité et la conformité des livrables. Esprit d'équipe: afin de favoriser la collaboration et le partage des connaissances. Proactivité: pour anticiper les problèmes et proposer des solutions adaptées."</td>
+                        <td>Excellence technique;Intégrité et honnêteté ;Sécurité avant tout;Esprit d'équipe;</td>
+                        <td>Excellence technique;Innovation et créativité ;Formation continue;Anticipation des besoins clients ;Efficacité opérationnelle;Communication interne ;</td>
+                        <td>Je me suis particulièrement senti fier du comportement de l'équipe lors d'un projet complexe où nous avons dû respecter des délais très serrés tout en assurant une bonne qualité de délivrables.</td>
+                        <td>Le manque de rigueur, la nonchalance et le non-respect des procédures ne devraient jamais être acceptés au sein de SMARTECH.</td>
+                        <td>Pour respecter les délais de certaines tâches critiques, l'équipe a dû s'engager en travaillant exceptionnellement les weekends, témoignant ainsi de son dévouement et de sa capacité à relever les défis.</td>
+                        <td>Nous devrions prioritairement améliorer la communication interne et la coordination entre les différentes équipes afin d'optimiser les processus de travail et éviter les retards.</td>
+                        <td>Argent;Satisfaction client;Impact de mon travail;Reconnaissance de l'expertise;Évolution professionnelle;Esprit d'équipe;Autonomie dans les missions;Défis techniques intéressants;</td>
+                        <td>J'aimerais voir évoluer la communication interne, avec un meilleur sens de l'écoute entre les équipes, ainsi qu'un engagement renforcé au respect des délais.</td>
+                        <td>J'aimerais contribuer au développement futur de SMARTECH en mettant à profit mon expertise technique et mon sens de l'organisation pour améliorer la qualité des livrables et optimiser les processus internes.</td>
+                        <td>SMARTECH est une entreprise d'ingénierie spécialisée dans le secteur oil & gas, reconnue pour son expertise technique et son engagement à fournir des solutions de haute qualité.</td>
+                        <td>Je suis fier de travailler ici parce que, malgré les défis, nous continuons à évoluer et à progresser.</td>
+                        <td>Je suis fier de travailler ici parce que nous plaçons nos clients au centre de nos priorités et que nous nous engageons à leur fournir des solutions fiables et adaptées à leurs besoins.</td>
+                        <td>Je suis fier de travailler ici parce que SMARTECH se distingue clairement de nos concurrents par la qualité de ses prestations et son engagement envers l'excellence.</td>
+                        <td>Je suis fier de travailler ici parce que SMARTECH s'adapte continuellement aux évolutions du marché et réussit à maintenir une position solide malgré la concurrence.</td>
+                        <td>Je suggère de continuer à investir dans la formation des collaborateurs et dans l'adoption de nouvelles technologies afin de renforcer notre compétitivité.</td>
+                    </tr>
+                    <tr>
+                        <td class="respondent-id">9</td>
+                        <td class="timestamp">8/6/25 9:04:30</td>
+                        <td class="timestamp">8/6/25 9:54:16</td>
+                        <td>anonymous</td>
+                        <td>Technicité, Intégrité, Ethique</td>
+                        <td>Équipe compétente et expérimentée;Autre;Expertise technique reconnue ;</td>
+                        <td>Formation des équipes ;Amélioration des processus internes;Modernisation technologique ;</td>
+                        <td>Réaliser des prestations selon les normes techniques et éthiques requises</td>
+                        <td>Modernisation de systèmes existants;Installation et commissioning;Conception et engineering;Support technique et dépannage;Formation technique;Maintenance préventive/corrective;</td>
+                        <td>Amélioration de la qualité produits;Réduction des coûts de maintenance ;Amélioration de l'efficacité opérationnelle;Modernisation technologique;</td>
+                        <td>Dans notre société, nous nous intéressons moins à la concurrence qu'à notre propre capacité à nous dépasser.</td>
+                        <td>Dans 10 ans, nous voyons notre entreprise comme un acteur incontournable de l'ingénierie énergétique en MEA, reconnu pour son excellence technique, son impact durable, et sa capacité à former une nouvelle génération d'ingénieurs engagés</td>
+                        <td>Innovateur technologique;Spécialiste de niche reconnu;</td>
+                        <td>Formations et certifications ;Services à valeur ajoutée;Partenariats stratégiques;Nouvelles technologies (IA, digitalisation);</td>
+                        <td>Comme un partenaire de confiance, reconnu pour sa rigueur, sa réactivité et sa capacité à apporter des solutions durables et innovantes dans un environnement complexe.</td>
+                        <td>xx</td>
+                        <td>xx</td>
+                        <td>xx</td>
+                        <td>Responsabilité, collaboration et adaptation</td>
+                        <td>Intégrité et honnêteté ;Excellence technique;Esprit d'équipe;</td>
+                        <td>Excellence technique;Innovation et créativité ;Formation continue;Efficacité opérationnelle;</td>
+                        <td>la patience collective est une force imbattable</td>
+                        <td>L'individualisme est un comportement peu apprécié chez nous. Nous valorisons avant tout l'esprit d'équipe, la solidarité et le sens du collectif.</td>
+                        <td>Notre plus grande réussite récente ? Avoir tenu bon. Survivre, persévérer, et continuer à avancer malgré les obstacles.</td>
+                        <td>Notre priorité doit être de renforcer notre rigueur dans la gestion de projet : respect des délais, qualité d'exécution, et réactivité face aux imprévus. Nous devons continuer à investir dans le développement de nos talents : formation, motivation, responsabilisation. Une équipe compétente et engagée fait toute la différence</td>
+                        <td>Défis techniques intéressants;Esprit d'équipe;Évolution professionnelle;Satisfaction client;Reconnaissance de l'expertise;Argent;Impact de mon travail;Autonomie dans les missions;</td>
+                        <td>J'aimerais voir évoluer l'organisation des espaces pour favoriser davantage la concentration, la collaboration, et le bien-être au quotidien.</td>
+                        <td>En tant que gérant, je souhaite contribuer au développement de l'entreprise en définissant une vision claire, ambitieuse et durable, tout en alignant les moyens humains, techniques et financiers pour la concrétiser.</td>
+                        <td>"Chez Smartech, nous mettons notre expertise en ingénierie pétrolière et énergétique au service de projets ambitieux en Afrique, avec une exigence d'excellence et d'innovation à chaque étape. Au-delà de la technique, nous sommes avant tout une équipe soudée, engagée à construire des solutions durables et à accompagner nos clients et nos talents vers la réussite."</td>
+                        <td>"Je suis fier de travailler ici parce que je me lève chaque matin en sachant que mon travail a un impact concret et positif."</td>
+                        <td>xx</td>
+                        <td>xx</td>
+                        <td>xx</td>
+                        <td>"Mettre en place des ateliers collaboratifs Instituer un programme de reconnaissance Former nos cadres au "leadership bienveillant" Définir des rituels de communication interne Créer un espace d'amélioration continue Suivre et mesurer les progrès de plus près"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const downloadBtn = document.getElementById('downloadXml');
+        
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function() {
+                try {
+                    // Path to the existing XML file
+                    const filePath = '../survey1-xml.xlsx';
+                    
+                    // Create a download link
+                    const a = document.createElement('a');
+                    a.href = filePath;
+                    a.download = 'survey1_results.xlsx'; // This will be the filename when downloaded
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Clean up
+                    document.body.removeChild(a);
+                    
+                    // Show success message
+                    alert('Le fichier XML a été téléchargé avec succès!');
+                    
+                } catch (error) {
+                    console.error('Error downloading XML file:', error);
+                    alert('Une erreur est survenue lors du téléchargement du fichier XML. Veuillez réessayer.');
+                }
+            });
+        } else {
+            console.warn('Download button not found');
+        }
+    });
+</script>
+</body>
+</html>

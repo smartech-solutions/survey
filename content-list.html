@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMARTECH Employee Survey Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(180deg, #129ddd 0%, #5a95b1 100%);
+            background-size: cover;
+            position: fixed;
+            padding: 0px;
+            margin: 0px;
+            width: 100%;
+            height: 100%;
+            font: normal 14px/1.618em "Roboto", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body:before {
+            content: "";
+            height: 0px;
+            padding: 0px;
+            border: 130em solid #313440;
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            z-index: 2;
+            display: block;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            -webkit-animation: puff 0.5s 1.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards, borderRadius 0.2s 2.3s linear forwards;
+            animation: puff 0.5s 1.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards, borderRadius 0.2s 2.3s linear forwards;
+        }
+
+        h1,
+        h2 {
+            font-weight: 500;
+            margin: 0px 0px 5px 0px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 16px;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #129ddd 0%, #5a95b1 100%);
+            color: white;
+            padding: 30px 25px;
+            box-shadow: 5px 0 25px rgba(18, 157, 221, 0.3);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-section img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 30%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-section img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .logo-section h1 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo-section p {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 3;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .profile-card {
+            background: #129ddd;
+            width: 56px;
+            height: 56px;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            opacity: 0;
+            margin-top: 70px;
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 6px rgba(0, 0, 0, 0.23);
+            -webkit-animation: init 0.5s 0.2s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards, moveDown 1s 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards, moveUp 1s 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, materia 0.5s 2.7s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+            animation: init 0.5s 0.2s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards, moveDown 1s 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards, moveUp 1s 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, materia 0.5s 2.7s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+        }
+
+        .profile-card.second-card {
+            -webkit-animation-delay: 0.4s, 1.0s, 2.0s, 2.9s;
+            animation-delay: 0.4s, 1.0s, 2.0s, 2.9s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-card header {
+            width: 179px;
+            height: 280px;
+            padding: 40px 20px 30px 20px;
+            display: inline-block;
+            float: left;
+            border-right: 2px dashed #EEEEEE;
+            background: #FFFFFF;
+            color: #000000;
+            margin-top: 50px;
+            opacity: 0;
+            text-align: center;
+            -webkit-animation: moveIn 1s 3.1s ease forwards;
+            animation: moveIn 1s 3.1s ease forwards;
+        }
+
+        .profile-card.second-card header {
+            -webkit-animation: moveIn 1s 3.3s ease forwards;
+            animation: moveIn 1s 3.3s ease forwards;
+        }
+
+        .profile-card header h1 {
+            color: #FF5722;
+        }
+
+        .profile-card header a {
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            margin: 25px 30px;
+        }
+
+        
+
+        .profile-card.second-card header a:after {
+            -webkit-animation: scaleIn 0.3s 3.7s ease forwards;
+            animation: scaleIn 0.3s 3.7s ease forwards;
+        }
+
+        .profile-card header a > img {
+            width: 120px;
+            max-width: 100%;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            -webkit-transition: -webkit-box-shadow 0.3s ease;
+            transition: box-shadow 0.3s ease;
+            -webkit-box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .profile-card header a:hover > img {
+            -webkit-box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-card .profile-bio {
+            width: 175px;
+            height: 180px;
+            display: inline-block;
+            float: right;
+            padding: 50px 20px 30px 20px;
+            background: #FFFFFF;
+            color: #333333;
+            margin-top: 50px;
+            text-align: center;
+            opacity: 0;
+            -webkit-animation: moveIn 1s 3.1s ease forwards;
+            animation: moveIn 1s 3.1s ease forwards;
+        }
+
+        .profile-card.second-card .profile-bio {
+            -webkit-animation: moveIn 1s 3.3s ease forwards;
+            animation: moveIn 1s 3.3s ease forwards;
+        }
+
+        .employee-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .employee-card header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-right: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .employee-card .profile-bio {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .employee-card header h1 {
+            color: #FFC107;
+        }
+
+        @-webkit-keyframes init {
+            0% {
+                width: 0px;
+                height: 0px;
+            }
+            100% {
+                width: 56px;
+                height: 56px;
+                margin-top: 0px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes init {
+            0% {
+                width: 0px;
+                height: 0px;
+            }
+            100% {
+                width: 56px;
+                height: 56px;
+                margin-top: 0px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes puff {
+            0% {
+                top: 100%;
+                height: 0px;
+                padding: 0px;
+            }
+            100% {
+                top: 50%;
+                height: 100%;
+                padding: 0px 100%;
+            }
+        }
+
+        @keyframes puff {
+            0% {
+                top: 100%;
+                height: 0px;
+                padding: 0px;
+            }
+            100% {
+                top: 50%;
+                height: 100%;
+                padding: 0px 100%;
+            }
+        }
+
+        @-webkit-keyframes borderRadius {
+            0% {
+                -webkit-border-radius: 50%;
+            }
+            100% {
+                -webkit-border-radius: 0px;
+            }
+        }
+
+        @keyframes borderRadius {
+            0% {
+                -webkit-border-radius: 50%;
+            }
+            100% {
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes moveDown {
+            0% {
+                top: 50%;
+            }
+            50% {
+                top: 40%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        @keyframes moveDown {
+            0% {
+                top: 50%;
+            }
+            50% {
+                top: 40%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        @-webkit-keyframes moveUp {
+            0% {
+                background: #FFB300;
+                top: 100%;
+            }
+            50% {
+                top: 40%;
+            }
+            100% {
+                top: 50%;
+                background: #E0E0E0;
+            }
+        }
+
+        @keyframes moveUp {
+            0% {
+                background: #FFB300;
+                top: 100%;
+            }
+            50% {
+                top: 40%;
+            }
+            100% {
+                top: 50%;
+                background: #E0E0E0;
+            }
+        }
+
+        @-webkit-keyframes materia {
+            0% {
+                background: #E0E0E0;
+            }
+            50% {
+                -webkit-border-radius: 4px;
+            }
+            100% {
+                width: 440px;
+                height: 280px;
+                background: #FFFFFF;
+                -webkit-border-radius: 4px;
+            }
+        }
+
+        @keyframes materia {
+            0% {
+                background: #E0E0E0;
+            }
+            50% {
+                border-radius: 4px;
+            }
+            100% {
+                width: 440px;
+                height: 280px;
+                background: #FFFFFF;
+                border-radius: 4px;
+            }
+        }
+
+        @-webkit-keyframes moveIn {
+            0% {
+                margin-top: 50px;
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+                margin-top: -20px;
+            }
+        }
+
+        @keyframes moveIn {
+            0% {
+                margin-top: 50px;
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+                margin-top: -20px;
+            }
+        }
+
+        @-webkit-keyframes scaleIn {
+            0% {
+                -webkit-transform: scale(0);
+            }
+            100% {
+                -webkit-transform: scale(1);
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media screen and (min-aspect-ratio: 4/3) {
+            body {
+                background-size: cover;
+            }
+            body:before {
+                width: 0px;
+            }
+            @-webkit-keyframes puff {
+                0% {
+                    top: 100%;
+                    width: 0px;
+                    padding-bottom: 0px;
+                }
+                100% {
+                    top: 50%;
+                    width: 100%;
+                    padding-bottom: 100%;
+                }
+            }
+            @keyframes puff {
+                0% {
+                    top: 100%;
+                    width: 0px;
+                    padding-bottom: 0px;
+                }
+                100% {
+                    top: 50%;
+                    width: 100%;
+                    padding-bottom: 100%;
+                }
+            }
+        }
+
+        @media screen and (min-height: 480px) {
+            .profile-card header {
+                width: auto;
+                height: auto;
+                padding: 30px 20px;
+                display: block;
+                float: none;
+                border-right: none;
+            }
+            .profile-card .profile-bio {
+                width: auto;
+                height: auto;
+                padding: 15px 20px 30px 20px;
+                display: block;
+                float: none;
+            }
+            @-webkit-keyframes materia {
+                0% {
+                    background: #E0E0E0;
+                }
+                50% {
+                    -webkit-border-radius: 4px;
+                }
+                100% {
+                    width: 280px;
+                    height: 440px;
+                    background: #FFFFFF;
+                    -webkit-border-radius: 4px;
+                }
+            }
+            @keyframes materia {
+                0% {
+                    background: #E0E0E0;
+                }
+                50% {
+                    border-radius: 4px;
+                }
+                100% {
+                    width: 280px;
+                    height: 440px;
+                    background: #FFFFFF;
+                    border-radius: 4px;
+                }
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .profile-card {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                flex-direction: column;
+            }
+            
+            .profile-card header {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px dashed #EEEEEE;
+                padding: 30px 20px;
+            }
+            
+            .profile-card .profile-bio {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo-section">
+            <img src="smartech_logo.png" alt="Smartech Logo" />
+            <h1>SMARTECH SOLUTIONS</h1>
+        </div>
+
+        <div class="nav-links">
+             <a href="dashboard-list.html" class="nav-link active">Liste des tableaux de bord</a>
+            <a href="content-list.html" class="nav-link">Liste du contenu des enquêtes</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="cards-container">
+            
+            <div class="profile-card">
+                <header>
+                    <a target="_blank" href="survey1/survey1_content.html">
+                        <img src="https://as1.ftcdn.net/v2/jpg/02/13/32/92/1000_F_213329287_qfv9ZXTiOLdjTLZVhLd3QXeC0KZBG7Vw.jpg" alt="Profile">
+                    </a>
+                    <h1>Questionnaire</h1>
+                    <h2>ENQUÊTE SUR VISION-MISSION-VALEURS DE SMARTECH SOLUTIONS</h2>
+                </header>
+
+                <div class="profile-bio">
+                    <p>
+                        Notre entreprise s'engage dans une démarche stratégique pour définir clairement sa Vision, sa Mission et ses Valeurs.
+                    </p>
+                </div>
+            </div>
+
+             <div class="profile-card">
+                <header>
+                    <a target="_blank" href="#">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.ZXqyN_R145XcAbVTxpA9WQHaHa?r=0&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Profile">
+                    </a>
+                    <h1>Questionnaire</h1>
+                    <h2>SUIVANTE</h2>
+                </header>
+
+                <div class="profile-bio">
+                    <p>
+                        Description
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
