@@ -8,82 +8,83 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         @media (max-width: 992px) {
-        .cards-container {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .profile-card {
-            margin-bottom: 30px;
-        }
-    }
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
 
-    @media (max-width: 768px) {
-        .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-            padding: 20px;
-            transform: translateX(0);
+            .profile-card {
+                margin-bottom: 30px;
+            }
         }
-        
-        .main-content {
-            margin-left: 0;
-            padding: 20px;
-        }
-        
-        .profile-card {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            flex-direction: column;
-        }
-        
-        .profile-card header {
-            width: 100%;
-            height: auto;
-            border-right: none;
-            border-bottom: 2px dashed #EEEEEE;
-            padding: 20px;
-        }
-        
-        .profile-card .profile-bio {
-            width: 100%;
-            height: auto;
-            padding: 20px;
-        }
-        
-        .logo-section {
-            margin-bottom: 20px;
-        }
-        
-        .logo-section img {
-            width: 40px;
-            height: 40px;
-        }
-        
-        .nav-links {
-            gap: 10px;
-        }
-        
-        .nav-link {
-            padding: 12px 15px;
-        }
-    }
 
-    @media (max-width: 480px) {
-        .profile-card header h1 {
-            font-size: 18px;
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .profile-card {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                flex-direction: column;
+            }
+
+            .profile-card header {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px dashed #EEEEEE;
+                padding: 20px;
+            }
+
+            .profile-card .profile-bio {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+
+            .logo-section {
+                margin-bottom: 20px;
+            }
+
+            .logo-section img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-link {
+                padding: 12px 15px;
+            }
         }
-        
-        .profile-card header h2 {
-            font-size: 14px;
+
+        @media (max-width: 480px) {
+            .profile-card header h1 {
+                font-size: 18px;
+            }
+
+            .profile-card header h2 {
+                font-size: 14px;
+            }
+
+            .profile-card .profile-bio p {
+                font-size: 13px;
+            }
         }
-        
-        .profile-card .profile-bio p {
-            font-size: 13px;
-        }
-    }
+
         html {
             height: 100%;
         }
@@ -304,14 +305,14 @@
             margin: 25px 30px;
         }
 
-        
+
 
         .profile-card.second-card header a:after {
             -webkit-animation: scaleIn 0.3s 3.7s ease forwards;
             animation: scaleIn 0.3s 3.7s ease forwards;
         }
 
-        .profile-card header a > img {
+        .profile-card header a>img {
             width: 120px;
             max-width: 100%;
             -webkit-border-radius: 50%;
@@ -322,7 +323,7 @@
             box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.06);
         }
 
-        .profile-card header a:hover > img {
+        .profile-card header a:hover>img {
             -webkit-box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.1);
             box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.1);
         }
@@ -372,6 +373,7 @@
                 width: 0px;
                 height: 0px;
             }
+
             100% {
                 width: 56px;
                 height: 56px;
@@ -385,6 +387,7 @@
                 width: 0px;
                 height: 0px;
             }
+
             100% {
                 width: 56px;
                 height: 56px;
@@ -399,6 +402,7 @@
                 height: 0px;
                 padding: 0px;
             }
+
             100% {
                 top: 50%;
                 height: 100%;
@@ -412,6 +416,7 @@
                 height: 0px;
                 padding: 0px;
             }
+
             100% {
                 top: 50%;
                 height: 100%;
@@ -423,6 +428,7 @@
             0% {
                 -webkit-border-radius: 50%;
             }
+
             100% {
                 -webkit-border-radius: 0px;
             }
@@ -432,6 +438,7 @@
             0% {
                 -webkit-border-radius: 50%;
             }
+
             100% {
                 border-radius: 0px;
             }
@@ -441,9 +448,11 @@
             0% {
                 top: 50%;
             }
+
             50% {
                 top: 40%;
             }
+
             100% {
                 top: 100%;
             }
@@ -453,9 +462,11 @@
             0% {
                 top: 50%;
             }
+
             50% {
                 top: 40%;
             }
+
             100% {
                 top: 100%;
             }
@@ -466,9 +477,11 @@
                 background: #FFB300;
                 top: 100%;
             }
+
             50% {
                 top: 40%;
             }
+
             100% {
                 top: 50%;
                 background: #E0E0E0;
@@ -480,9 +493,11 @@
                 background: #FFB300;
                 top: 100%;
             }
+
             50% {
                 top: 40%;
             }
+
             100% {
                 top: 50%;
                 background: #E0E0E0;
@@ -493,9 +508,11 @@
             0% {
                 background: #E0E0E0;
             }
+
             50% {
                 -webkit-border-radius: 4px;
             }
+
             100% {
                 width: 440px;
                 height: 280px;
@@ -508,9 +525,11 @@
             0% {
                 background: #E0E0E0;
             }
+
             50% {
                 border-radius: 4px;
             }
+
             100% {
                 width: 440px;
                 height: 280px;
@@ -524,6 +543,7 @@
                 margin-top: 50px;
                 opacity: 0;
             }
+
             100% {
                 opacity: 1;
                 margin-top: -20px;
@@ -535,6 +555,7 @@
                 margin-top: 50px;
                 opacity: 0;
             }
+
             100% {
                 opacity: 1;
                 margin-top: -20px;
@@ -545,6 +566,7 @@
             0% {
                 -webkit-transform: scale(0);
             }
+
             100% {
                 -webkit-transform: scale(1);
             }
@@ -554,6 +576,7 @@
             0% {
                 transform: scale(0);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -563,27 +586,32 @@
             body {
                 background-size: cover;
             }
+
             body:before {
                 width: 0px;
             }
+
             @-webkit-keyframes puff {
                 0% {
                     top: 100%;
                     width: 0px;
                     padding-bottom: 0px;
                 }
+
                 100% {
                     top: 50%;
                     width: 100%;
                     padding-bottom: 100%;
                 }
             }
+
             @keyframes puff {
                 0% {
                     top: 100%;
                     width: 0px;
                     padding-bottom: 0px;
                 }
+
                 100% {
                     top: 50%;
                     width: 100%;
@@ -601,6 +629,7 @@
                 float: none;
                 border-right: none;
             }
+
             .profile-card .profile-bio {
                 width: auto;
                 height: auto;
@@ -608,13 +637,16 @@
                 display: block;
                 float: none;
             }
+
             @-webkit-keyframes materia {
                 0% {
                     background: #E0E0E0;
                 }
+
                 50% {
                     -webkit-border-radius: 4px;
                 }
+
                 100% {
                     width: 280px;
                     height: 440px;
@@ -622,13 +654,16 @@
                     -webkit-border-radius: 4px;
                 }
             }
+
             @keyframes materia {
                 0% {
                     background: #E0E0E0;
                 }
+
                 50% {
                     border-radius: 4px;
                 }
+
                 100% {
                     width: 280px;
                     height: 440px;
@@ -650,19 +685,19 @@
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
             }
-            
+
             .main-content {
                 margin-left: 0;
                 padding: 20px;
             }
-            
+
             .profile-card {
                 width: 100%;
                 max-width: 400px;
                 height: auto;
                 flex-direction: column;
             }
-            
+
             .profile-card header {
                 width: 100%;
                 height: auto;
@@ -670,17 +705,31 @@
                 border-bottom: 2px dashed #EEEEEE;
                 padding: 30px 20px;
             }
-            
+
             .profile-card .profile-bio {
                 width: 100%;
                 height: auto;
                 padding: 20px;
             }
         }
+        .notification-banner {
+            position: relative;
+            top: 0;
+            left: 0;
+            right: 0;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="notification-banner">
+        <span>👉 </span>Cliquez sur le logo du questionnaire pour accéder à son contenu<span> 👈</span>
+    </div>
     <div class="sidebar">
         <div class="logo-section">
             <img src="smartech_logo.png" alt="Smartech Logo" />
@@ -688,17 +737,17 @@
         </div>
 
         <div class="nav-links">
-             <a href="dashboard-list.html" class="nav-link active">Liste des tableaux de bord</a>
+            <a href="dashboard-list.html" class="nav-link active">Liste des tableaux de bord</a>
             <a href="content-list.html" class="nav-link">Liste du contenu des enquêtes</a>
         </div>
     </div>
     <div class="main-content">
         <div class="cards-container">
-            
             <div class="profile-card">
                 <header>
                     <a target="_blank" href="survey1/survey1_content.html">
-                        <img src="https://as1.ftcdn.net/v2/jpg/02/13/32/92/1000_F_213329287_qfv9ZXTiOLdjTLZVhLd3QXeC0KZBG7Vw.jpg" alt="Profile">
+                        <img src="https://as1.ftcdn.net/v2/jpg/02/13/32/92/1000_F_213329287_qfv9ZXTiOLdjTLZVhLd3QXeC0KZBG7Vw.jpg"
+                            alt="Profile">
                     </a>
                     <h1>Questionnaire</h1>
                     <h2>ENQUÊTE SUR VISION-MISSION-VALEURS DE SMARTECH SOLUTIONS</h2>
@@ -706,15 +755,17 @@
 
                 <div class="profile-bio">
                     <p>
-                        Notre entreprise s'engage dans une démarche stratégique pour définir clairement sa Vision, sa Mission et ses Valeurs.
+                        Notre entreprise s'engage dans une démarche stratégique pour définir clairement sa Vision,
+                        sa
+                        Mission et ses Valeurs.
                     </p>
                 </div>
             </div>
-
-             <div class="profile-card">
+            <div class="profile-card">
                 <header>
                     <a target="_blank" href="#">
-                        <img src="https://tse2.mm.bing.net/th/id/OIP.ZXqyN_R145XcAbVTxpA9WQHaHa?r=0&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Profile">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.ZXqyN_R145XcAbVTxpA9WQHaHa?r=0&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3"
+                            alt="Profile">
                     </a>
                     <h1>Questionnaire</h1>
                     <h2>SUIVANTE</h2>
@@ -725,25 +776,28 @@
                         Description
                     </p>
                 </div>
+                <div class="nav-links">
+                </div>
             </div>
+
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // Mobile menu toggle
-        const logoSection = document.querySelector('.logo-section');
-        if (logoSection && window.innerWidth <= 992) {
-            const navLinks = document.querySelector('.nav-links');
-            
-            logoSection.addEventListener('click', function() {
-                if (navLinks.style.display === 'flex') {
-                    navLinks.style.display = 'none';
-                } else {
-                    navLinks.style.display = 'flex';
-                }
-            });
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const logoSection = document.querySelector('.logo-section');
+            if (logoSection && window.innerWidth <= 992) {
+                const navLinks = document.querySelector('.nav-links');
+
+                logoSection.addEventListener('click', function () {
+                    if (navLinks.style.display === 'flex') {
+                        navLinks.style.display = 'none';
+                    } else {
+                        navLinks.style.display = 'flex';
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
